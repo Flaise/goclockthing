@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/aerth/playwav"
+	"github.com/Flaise/playwav"
 	"github.com/go-co-op/gocron"
 )
 
@@ -22,7 +22,7 @@ func nowToTally() (fours int, ones int) {
 }
 
 func nextTone(path string) error {
-	_, err := playwav.FromFile(path)
+	err := playwav.FromFile(path)
 	if err != nil {
 		return err
 	}
