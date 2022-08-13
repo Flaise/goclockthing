@@ -65,11 +65,25 @@ func playTally() error {
 	return nil
 }
 
+func playHalf() error {
+	err := nextTone("half.wav")
+	if err != nil {
+		return err
+	}
+}
+
 func main() {
 	scheduler := gocron.NewScheduler(time.Local)
 
 	scheduler.Every(1).Hour().StartAt(time.Unix(0, 0)).Do(func() {
 		err := playTally()
+		if err != nil {
+			panic(err)
+		}
+	})
+
+	scheduler.Every(1).Hour().StartAt(time.Unix(60*30, 0)).Do(func() {
+		err := playHalf()
 		if err != nil {
 			panic(err)
 		}
