@@ -1,9 +1,6 @@
 package assets
 
-import _ "embed"
+import "embed"
 
-//go:embed hour.wav
-var Hour []byte
-
-//go:embed minute.wav
-var Minute []byte
+//go:embed four.wav one.wav
+var Content embed.FS
