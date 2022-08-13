@@ -1,8 +1,10 @@
 package main
 
 import (
+	"io"
 	"time"
 
+	"github.com/Flaise/goclockthing/assets"
 	"github.com/Flaise/playwav"
 	"github.com/go-co-op/gocron"
 )
@@ -22,12 +24,25 @@ func nowToTally() (fours int, ones int) {
 }
 
 func nextTone(path string) error {
-	err := playwav.FromFile(path)
+	file, err := assets.Content.Open(path)
 	if err != nil {
 		return err
 	}
 
-	time.Sleep(100 * time.Millisecond)
+	stat, err := file.Stat()
+	if err != nil {
+		return err
+	}
+
+	size := stat.Size()
+	reader := file.(io.ReadSeeker)
+
+	err = playwav.FromReader(reader, size)
+	if err != nil {
+		return err
+	}
+
+	time.Sleep(110 * time.Millisecond)
 
 	return nil
 }
@@ -36,13 +51,13 @@ func playTally() error {
 	fours, ones := nowToTally()
 
 	for i := 0; i < fours; i += 1 {
-		err := nextTone("./assets/four.wav")
+		err := nextTone("four.wav")
 		if err != nil {
 			return err
 		}
 	}
 	for i := 0; i < ones; i += 1 {
-		err := nextTone("./assets/one.wav")
+		err := nextTone("one.wav")
 		if err != nil {
 			return err
 		}
