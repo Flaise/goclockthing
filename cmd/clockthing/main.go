@@ -47,9 +47,7 @@ func nextTone(path string) error {
 	return nil
 }
 
-func playTally() error {
-	fours, ones := nowToTally()
-
+func playTally(fours int, ones int) error {
 	for i := 0; i < fours; i += 1 {
 		err := nextTone("four.wav")
 		if err != nil {
@@ -65,18 +63,25 @@ func playTally() error {
 	return nil
 }
 
+func playCurrentTally() error {
+	fours, ones := nowToTally()
+
+	return playTally(fours, ones)
+}
+
 func playHalf() error {
 	err := nextTone("half.wav")
 	if err != nil {
 		return err
 	}
+	return nil
 }
 
 func main() {
 	scheduler := gocron.NewScheduler(time.Local)
 
 	scheduler.Every(1).Hour().StartAt(time.Unix(0, 0)).Do(func() {
-		err := playTally()
+		err := playCurrentTally()
 		if err != nil {
 			panic(err)
 		}
