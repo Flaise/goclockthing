@@ -1,3 +1,9 @@
+github.com/aerth/playwav v0.0.1 h1:WVQ9wItzNbikJ/JSGGZi7baweoCMv82rHkxUOV0wy1s=
+github.com/aerth/playwav v0.0.1/go.mod h1:3DbK4rnFYpHGRcD/wQhAEz9UmL3Wc26cYwx+7E4Bp7s=
+github.com/cocoonlife/goalsa v0.0.0-20211008122401-47ec570866e3 h1:cwdUf09+PD5/hle/jb9WHISSCLzQweiUc0sPxfrA6UE=
+github.com/cocoonlife/goalsa v0.0.0-20211008122401-47ec570866e3/go.mod h1:5aLO409bJnd+jCw0t/SB/DhHkVBhPAE31lnHJnYQxy0=
+github.com/cryptix/wav v0.0.0-20180415113528-8bdace674401 h1:rZ+OHHkwlkYALTEd6AYXSL92K/SEc4fkz+TfweIwu6A=
+github.com/cryptix/wav v0.0.0-20180415113528-8bdace674401/go.mod h1:knK8fd+KPlGGqSUWogv1DQzGTwnfUvAi0cIoWyOG7+U=
 github.com/go-co-op/gocron v1.16.2 h1:p9ghzsN5PqqPyWXYDO2JlvD1DOUNT8pPSyGYC62XBcY=
 github.com/go-co-op/gocron v1.16.2/go.mod h1:W/N9G7bntRo5fVQlmjncvqSt74jxCxHfjyHlgcB33T8=
 github.com/robfig/cron/v3 v3.0.1 h1:WdRxkvbJztn8LMz/QEvLN5sBU+xKpSqwwUO1Pjr4qDs=

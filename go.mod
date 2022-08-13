@@ -3,6 +3,9 @@ module github.com/Flaise/goclockthing
 go 1.18
 
 require (
+	github.com/aerth/playwav v0.0.1 // indirect
+	github.com/cocoonlife/goalsa v0.0.0-20211008122401-47ec570866e3 // indirect
+	github.com/cryptix/wav v0.0.0-20180415113528-8bdace674401 // indirect
 	github.com/go-co-op/gocron v1.16.2 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
