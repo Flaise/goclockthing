@@ -1,8 +1,10 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
+	"os"
 	"os/exec"
 	"time"
 
@@ -24,13 +26,18 @@ func nowToTally() (fours int, ones int) {
 	return hoursToTally(hours)
 }
 
+// See https://alsa.opensrc.org/Aplay#Questions for explanation of what arguments are valid.
+var deviceName string
+
 func nextTone(path string) error {
 	file, err := assets.Content.Open(path)
 	if err != nil {
 		return err
 	}
 
-	cmd := exec.Command("aplay")
+	cmd := exec.Command("aplay", "-q", "-D", deviceName)
+	cmd.Stderr = os.Stderr
+
 	stream, err := cmd.StdinPipe()
 	if err != nil {
 		return err
@@ -103,6 +110,10 @@ func scheduleChimes(scheduler *gocron.Scheduler) {
 }
 
 func main() {
+	flag.StringVar(&deviceName, "device-name", "default",
+		"The device name to play audio on. If omitted, use the default device.")
+	flag.Parse()
+
 	scheduler := gocron.NewScheduler(time.Local)
 
 	// Need to continually reschedule to fix timers after computer sleeps.
