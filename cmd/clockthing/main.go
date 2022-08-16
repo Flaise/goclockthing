@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"os/exec"
 	"time"
@@ -85,22 +86,31 @@ func playHalf() error {
 	return nil
 }
 
-func main() {
-	scheduler := gocron.NewScheduler(time.Local)
-
-	scheduler.Every(1).Hour().StartAt(time.Unix(0, 0)).Do(func() {
+func scheduleChimes(scheduler *gocron.Scheduler) {
+	scheduler.Every(1).Hour().StartAt(time.Unix(0, 0)).Tag("chime").Do(func() {
 		err := playCurrentTally()
 		if err != nil {
 			panic(err)
 		}
 	})
 
-	scheduler.Every(1).Hour().StartAt(time.Unix(60*30, 0)).Do(func() {
+	scheduler.Every(1).Hour().StartAt(time.Unix(60*30, 0)).Tag("chime").Do(func() {
 		err := playHalf()
 		if err != nil {
 			panic(err)
 		}
 	})
+}
 
+func main() {
+	scheduler := gocron.NewScheduler(time.Local)
+
+	// Need to continually reschedule to fix timers after computer sleeps.
+	scheduler.Every(30).Seconds().Do(func() {
+		scheduler.RemoveByTag("chime")
+		scheduleChimes(scheduler)
+	})
+
+	fmt.Println("Running clock thing...")
 	scheduler.StartBlocking()
 }
