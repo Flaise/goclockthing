@@ -2,10 +2,10 @@ package main
 
 import (
 	"io"
+	"os/exec"
 	"time"
 
 	"github.com/Flaise/goclockthing/assets"
-	"github.com/Flaise/playwav"
 	"github.com/go-co-op/gocron"
 )
 
@@ -29,20 +29,28 @@ func nextTone(path string) error {
 		return err
 	}
 
-	stat, err := file.Stat()
+	cmd := exec.Command("aplay")
+	stream, err := cmd.StdinPipe()
 	if err != nil {
 		return err
 	}
 
-	size := stat.Size()
-	reader := file.(io.ReadSeeker)
-
-	err = playwav.FromReader(reader, size)
+	err = cmd.Start()
 	if err != nil {
 		return err
 	}
 
-	time.Sleep(110 * time.Millisecond)
+	_, err = io.Copy(stream, file)
+	if err != nil {
+		return err
+	}
+
+	err = stream.Close()
+	if err != nil {
+		return err
+	}
+
+	time.Sleep(290 * time.Millisecond)
 
 	return nil
 }
