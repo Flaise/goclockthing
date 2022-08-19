@@ -70,6 +70,9 @@ func playTally(fours int, ones int) error {
 			return err
 		}
 	}
+
+	time.Sleep(130 * time.Millisecond)
+
 	for i := 0; i < ones; i += 1 {
 		err := nextTone("one.wav")
 		if err != nil {
