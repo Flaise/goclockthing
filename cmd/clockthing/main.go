@@ -112,7 +112,16 @@ func scheduleChimes(scheduler *gocron.Scheduler) {
 func main() {
 	flag.StringVar(&deviceName, "device-name", "default",
 		"The device name to play audio on. If omitted, use the default device.")
+	doTest := flag.Bool("test", false, "True to play audio immediately to test speaker setup.")
 	flag.Parse()
+
+	if *doTest {
+		err := playTally(2, 3)
+		if err != nil {
+			panic(err)
+		}
+		return
+	}
 
 	scheduler := gocron.NewScheduler(time.Local)
 
