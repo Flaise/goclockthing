@@ -29,7 +29,7 @@ func nowToTally() (fours int, ones int) {
 // See https://alsa.opensrc.org/Aplay#Questions for explanation of what arguments are valid.
 var deviceName string
 
-func nextTone(path string) error {
+func playTone(path string) error {
 	file, err := assets.Content.Open(path)
 	if err != nil {
 		return err
@@ -58,23 +58,28 @@ func nextTone(path string) error {
 		return err
 	}
 
-	time.Sleep(290 * time.Millisecond)
+	time.Sleep(280 * time.Millisecond)
+
+	err = cmd.Process.Kill()
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
 func playTally(fours int, ones int) error {
 	for i := 0; i < fours; i += 1 {
-		err := nextTone("four.wav")
+		err := playTone("four.wav")
 		if err != nil {
 			return err
 		}
 	}
 
-	time.Sleep(130 * time.Millisecond)
+	time.Sleep(115 * time.Millisecond)
 
 	for i := 0; i < ones; i += 1 {
-		err := nextTone("one.wav")
+		err := playTone("one.wav")
 		if err != nil {
 			return err
 		}
@@ -89,7 +94,7 @@ func playCurrentTally() error {
 }
 
 func playHalf() error {
-	err := nextTone("half.wav")
+	err := playTone("half.wav")
 	if err != nil {
 		return err
 	}
