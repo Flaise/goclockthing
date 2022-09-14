@@ -155,7 +155,9 @@ func main() {
 	scheduler := gocron.NewScheduler(time.Local)
 
 	// Need to continually reschedule to fix timers after computer sleeps.
-	scheduler.Every(30).Seconds().Do(rescheduleChimes)
+	scheduler.Every(30).Seconds().Do(func() {
+		rescheduleChimes(scheduler)
+	})
 
 	fmt.Println("Running clock thing...")
 	scheduler.StartBlocking()
