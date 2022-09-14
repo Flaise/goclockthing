@@ -107,6 +107,12 @@ func playHalf() error {
 
 func scheduleChimes(scheduler *gocron.Scheduler) {
 	scheduler.Every(1).Hour().StartAt(time.Unix(0, 0)).Tag("chime").Do(func() {
+		if time.Now().Minute() != 0 {
+			// computer probably woke from sleeping
+			rescheduleChimes(scheduler)
+			return
+		}
+
 		err := playCurrentTally()
 		if err != nil {
 			panic(err)
@@ -114,11 +120,22 @@ func scheduleChimes(scheduler *gocron.Scheduler) {
 	})
 
 	scheduler.Every(1).Hour().StartAt(time.Unix(60*30, 0)).Tag("chime").Do(func() {
+		if time.Now().Minute() != 30 {
+			// computer probably woke from sleeping
+			rescheduleChimes(scheduler)
+			return
+		}
+
 		err := playHalf()
 		if err != nil {
 			panic(err)
 		}
 	})
+}
+
+func rescheduleChimes(scheduler *gocron.Scheduler) {
+	scheduler.RemoveByTag("chime")
+	scheduleChimes(scheduler)
 }
 
 func main() {
@@ -138,10 +155,7 @@ func main() {
 	scheduler := gocron.NewScheduler(time.Local)
 
 	// Need to continually reschedule to fix timers after computer sleeps.
-	scheduler.Every(30).Seconds().Do(func() {
-		scheduler.RemoveByTag("chime")
-		scheduleChimes(scheduler)
-	})
+	scheduler.Every(30).Seconds().Do(rescheduleChimes)
 
 	fmt.Println("Running clock thing...")
 	scheduler.StartBlocking()
