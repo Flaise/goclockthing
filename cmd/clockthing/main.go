@@ -38,7 +38,7 @@ func playTone(path string) error {
 	cmd := exec.Command("aplay", "-q", "-D", deviceName)
 	cmd.Stderr = os.Stderr
 
-	stream, err := cmd.StdinPipe()
+	toCmd, err := cmd.StdinPipe()
 	if err != nil {
 		return err
 	}
@@ -48,22 +48,26 @@ func playTone(path string) error {
 		return err
 	}
 
-	_, err = io.Copy(stream, file)
+	_, err = io.Copy(toCmd, file)
 	if err != nil {
 		return err
 	}
 
-	err = stream.Close()
+	err = toCmd.Close()
 	if err != nil {
 		return err
 	}
 
-	time.Sleep(280 * time.Millisecond)
-
-	err = cmd.Process.Kill()
+	// Sometimes the first tone is delayed so wait on the command
+	// instead of a regular sleep instruction.
+	err = cmd.Wait()
 	if err != nil {
 		return err
 	}
+
+	// each audio clip is 200ms
+	// also seems to be roughly 40ms of lag after
+	time.Sleep(40 * time.Millisecond)
 
 	return nil
 }
@@ -76,7 +80,7 @@ func playTally(fours int, ones int) error {
 		}
 	}
 
-	time.Sleep(115 * time.Millisecond)
+	time.Sleep(110 * time.Millisecond)
 
 	for i := 0; i < ones; i += 1 {
 		err := playTone("one.wav")
