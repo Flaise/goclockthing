@@ -106,7 +106,7 @@ func playHalf() error {
 }
 
 func runChime(scheduler *gocron.Scheduler, minute int, callMe func() error) {
-	if time.Now().Minute() != 0 {
+	if time.Now().Minute() != minute {
 		// computer probably woke from sleeping
 		rescheduleChimes(scheduler)
 		return
