@@ -67,7 +67,7 @@ func playTone(path string) error {
 
 	// each audio clip is 200ms
 	// also seems to be roughly 40ms of lag after
-	time.Sleep(40 * time.Millisecond)
+	time.Sleep(70 * time.Millisecond)
 
 	return nil
 }
