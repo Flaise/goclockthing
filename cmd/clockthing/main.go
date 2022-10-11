@@ -98,11 +98,7 @@ func playCurrentTally() error {
 }
 
 func playHalf() error {
-	err := playTone("half.wav")
-	if err != nil {
-		return err
-	}
-	return nil
+	return playTone("half.wav")
 }
 
 func runChime(scheduler *gocron.Scheduler, minute int, callMe func() error) {
@@ -136,7 +132,7 @@ func rescheduleChimes(scheduler *gocron.Scheduler) {
 func main() {
 	flag.StringVar(&deviceName, "device-name", "default",
 		"The device name to play audio on. If omitted, use the default device.")
-	doTest := flag.Bool("test", false, "True to play audio immediately to test speaker setup.")
+	doTest := flag.Bool("test", false, "Play audio immediately to test speaker setup.")
 	flag.Parse()
 
 	if *doTest {
